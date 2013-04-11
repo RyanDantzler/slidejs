@@ -1,6 +1,6 @@
-/* slide-0.1.1.js
+/* slide-0.1.2.js
 by Ryan Dantzler
-March 15, 2013 */
+March 27, 2013 */
 
 $(document).ready(function() {
 	var clicked=false;
@@ -24,9 +24,10 @@ $(document).ready(function() {
 	}
 	
 	function getSlide() {
+		$('.content').hide();
+		
 		if (clicked) // if a slide has already been loaded, send away current slide before retrieving new slide
 		{
-			$('.content').hide();
 			$('#main').stop().animate(
 				{
 					top:900+pushY+'px'
@@ -41,19 +42,23 @@ $(document).ready(function() {
 						); // end animate
 				} // end first callback function
 			); // end animate
-			$('#sidebar').stop().delay(500).animate(
+			$('#sidebar').stop().animate(
 				{
 					left:-600+pushX+'px'
 				}, 
 				1000,
 				function () { // first callback function
-					$('#sidebar').stop().animate(
+					$('#sidebar').delay(500).show().animate(
 						{
 							left:'20px'
 						}, 
 						1000,
 						function () { // second callback function
-							$('.content').fadeIn(400);
+							$('.content').fadeIn(400,
+								function () { // third callback function
+									$('#copyright').fadeIn(400); // end fadeIn
+								} // end third callback function
+							); // end fadeIn
 						} // end second callback function
 					); // end animate
 				} // end first callback function
@@ -61,7 +66,6 @@ $(document).ready(function() {
 		}
 		else // if no previous slide, retrieve slide
 		{
-			$('.content').hide();
 			$('#main').show().animate(
 				{
 					top:'80px'
@@ -95,7 +99,6 @@ $(document).ready(function() {
 		clicked=true;
 		selected=topic;
 	}
-	
 	
 	$('nav a').click(function(evt) {
 		evt.preventDefault(); // prevent following nav links for javascript enabled users
